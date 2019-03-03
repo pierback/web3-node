@@ -1,0 +1,16 @@
+{
+  "name": "web3-node",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "bl": "node . bl",
+    "cc": "node . cc"
+  },
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "moment": "^2.24.0",
+    "web3": "^1.0.0-beta.33",
+    "web3-utils": "^1.0.0-beta.46"
+  }
+}
