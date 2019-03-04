@@ -31,7 +31,7 @@ async function getCffcnstAbi() {
 
 async function getChairBalance(instance) {
   return new Promise((resolve, reject) => {
-    instance.methods
+    return instance.methods
       .getChairBalance()
       .call({
         from: '0x02e9f84165314bb8c255d8d3303b563b7375eb61',
@@ -45,7 +45,7 @@ async function getChairBalance(instance) {
 
 async function getOwnBalance(instance) {
   return new Promise((resolve, reject) => {
-    instance.methods
+    return instance.methods
       .getOwnBalance()
       .call({
         from: '0x02e9f84165314bb8c255d8d3303b563b7375eb61',
@@ -59,7 +59,7 @@ async function getOwnBalance(instance) {
 
 async function payCoffee(instance) {
   return new Promise((resolve, reject) => {
-    instance.methods
+    return instance.methods
       .payCoffee()
       .send({
         from: '0x02e9f84165314bb8c255d8d3303b563b7375eb61',
@@ -81,7 +81,7 @@ async function payCoffee(instance) {
 async function transferGasEstimate(instance) {
   console.log('transferGasEstimate: ');
   return new Promise((resolve, reject) => {
-    instance.methods
+    return instance.methods
       .transfer('18ef96d887954472de5e9f47d60ba8dea371dbfe', 2)
       .estimateGas({
         from: '0x02e9f84165314bb8c255d8d3303b563b7375eb61',

@@ -1,13 +1,16 @@
 const path = require('path');
 const moment = require('moment');
-const { fromAscii, bytesToHex } = require('web3-utils');
+const { fromAscii, bytesToHex, hexToString } = require('web3-utils');
 const { readFileAsync } = require('./utils');
 
 const appDir = path.dirname(require.main.filename);
 
-async function startBvgl(web3) {
+let web3;
+
+async function startBvgl(_web3) {
+  web3 = web3 || _web3;
   const address = await getBvrglstAddress();
-  console.log('BeverageList Contract Address: \n', address);
+  console.log('\nBeverageList Contract Address: %s\n', address);
   const abi = await getBvrglstAbi();
   const deployedInstance = new web3.eth.Contract(abi, address);
   const gasAmount = await setDrinkDataGasEstimate(deployedInstance);
@@ -20,29 +23,43 @@ async function getBvrglstAbi() {
 }
 
 async function setDrinkData(instance, gasAmount) {
+  console.log('gasAmount: ', gasAmount);
   const drinks = ['cola', 'fanta', 'water', 'mate', 'coffee', 'spezi'];
   const time = fromAscii(moment(new Date()).format('YYYY-MM-DDTHH:mm:ss'));
   const weekday = fromAscii(days[new Date().getDay()]);
   const drink = fromAscii(drinks[Math.floor(Math.random() * drinks.length)]);
 
-  return new Promise((resolve, reject) => {
-    instance.methods
-      .setDrinkData(time, drink, weekday)
-      .send({
-        from: '0xe8816898d851d5b61b7f950627d04d794c07ca37',
-        gas: gasAmount,
-      })
-      .on('transactionHash', (hash) => {
-        console.log('hash: ', hash);
-        resolve();
-      })
-      .on('receipt', (receipt) => {
-        console.log('receipt: ', receipt.events.NewDrink.returnValues);
-      })
-      .on('error', (err) => {
-        console.log('setDrinkData error: ', err);
-      });
-  });
+  return new Promise((resolve, reject) => instance.methods
+    .setDrinkData(time, drink, weekday)
+    .send({
+      from: '0xe8816898d851d5b61b7f950627d04d794c07ca37',
+      gas: gasAmount,
+    })
+    .on('transactionHash', (hash) => {
+      console.log('hash: ', hash);
+      resolve();
+    })
+    .on('receipt', (receipt) => {
+      printEvent(receipt);
+      console.log('Starting over');
+      setTimeout(startBvgl, 7000);
+    })
+    .on('error', (err) => {
+      console.log('setDrinkData error: ', err);
+    }));
+}
+
+function printEvent(receipt) {
+  if (receipt.events) {
+    const { Address, time, drink, weekday } = receipt.events.NewDrink.returnValues;
+    console.log('receipt:');
+    console.log('  Address', Address);
+    console.log('  time', hexToString(time));
+    console.log('  drink:', hexToString(drink));
+    console.log('  weekday: %s\n\n', hexToString(weekday));
+  } else {
+    console.log('receipt: %o \n\n', receipt);
+  }
 }
 
 async function getBvrglstAddress() {
