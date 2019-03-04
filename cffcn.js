@@ -34,7 +34,7 @@ async function getChairBalance(instance) {
     return instance.methods
       .getChairBalance()
       .call({
-        from: '0x02e9f84165314bb8c255d8d3303b563b7375eb61',
+        from: '0xe8816898d851d5b61b7f950627d04d794c07ca37',
       })
       .then((result) => {
         console.log('getChairBalance: %s \n', JSON.stringify(result));
@@ -48,7 +48,7 @@ async function getOwnBalance(instance) {
     return instance.methods
       .getOwnBalance()
       .call({
-        from: '0x02e9f84165314bb8c255d8d3303b563b7375eb61',
+        from: '0xe8816898d851d5b61b7f950627d04d794c07ca37',
       })
       .then((result) => {
         console.log('getOwnBalance: %s \n', JSON.stringify(result));
@@ -62,7 +62,7 @@ async function payCoffee(instance) {
     return instance.methods
       .payCoffee()
       .send({
-        from: '0x02e9f84165314bb8c255d8d3303b563b7375eb61',
+        from: '0xe8816898d851d5b61b7f950627d04d794c07ca37',
         gas: 2300000,
       })
       .on('transactionHash', (hash) => {
@@ -84,7 +84,7 @@ async function transferGasEstimate(instance) {
     return instance.methods
       .transfer('18ef96d887954472de5e9f47d60ba8dea371dbfe', 2)
       .estimateGas({
-        from: '0x02e9f84165314bb8c255d8d3303b563b7375eb61',
+        from: '0xe8816898d851d5b61b7f950627d04d794c07ca37',
         gas: 5000000,
       })
       .then(gasAmount => resolve(gasAmount))
@@ -101,7 +101,7 @@ async function transfer(instance, gasAmount) {
     instance.methods
       .transfer('18ef96d887954472de5e9f47d60ba8dea371dbfe', 2)
       .send({
-        from: '0x02e9f84165314bb8c255d8d3303b563b7375eb61',
+        from: '0xe8816898d851d5b61b7f950627d04d794c07ca37',
         gas: gasAmount,
       })
       .on('transactionHash', (hash) => {
