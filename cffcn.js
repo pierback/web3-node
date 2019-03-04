@@ -1,7 +1,8 @@
+const path = require('path');
 const { bytesToHex } = require('web3-utils');
-
-const cffcnDir = '/Users/fabianpieringer/go/src/github.com/pierback/bchain-qlearning/internal/contracts/CoffeeCoin/build/CoffeeCoin.abi';
 const { readFileAsync } = require('./utils');
+
+const appDir = path.dirname(require.main.filename);
 
 async function startCC(web3) {
   const address = await getCffcnAddress();
@@ -13,17 +14,18 @@ async function startCC(web3) {
 
   await payCoffee(deployedInstance);
 
-  // eslint-disable-next-line no-use-before-define
   await getChairBalance(deployedInstance);
   await getOwnBalance(deployedInstance);
 }
 
 async function getCffcnAddress() {
-  const bin = await readFileAsync('/var/tmp/cffcn');
+  const address = path.join(appDir, '..', 'smart-contracts', 'CoffeeCoin', 'contractAddress');
+  const bin = await readFileAsync(address);
   return bytesToHex(bin);
 }
 
 async function getCffcnstAbi() {
+  const cffcnDir = path.join(appDir, '..', 'smart-contracts', 'CoffeeCoin', 'build', 'CoffeeCoin.abi');
   return JSON.parse(await readFileAsync(cffcnDir));
 }
 
