@@ -1,4 +1,4 @@
-const fs = require("fs");
+const fs = require('fs');
 
 async function readFileAsync(path) {
   return new Promise((resolve, reject) => {
@@ -10,5 +10,4 @@ async function readFileAsync(path) {
 
 module.exports = {
   readFileAsync,
-  unlockAccount
 };

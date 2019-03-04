@@ -5,10 +5,13 @@ const { startCC } = require("./cffcn");
 
 (async function main() {
   if (process.argv[2] == "bl") {
-    startBvgl(web3);
-  }
-  if (process.argv[2] == "cc") {
-    startCC(web3);
+    startBvgl(web3).catch(err =>{
+      console.log('Error bvgl: ', err);
+    });
+  } else if (process.argv[2] == "cc") {
+    startCC(web3).catch(err =>{
+      console.log('Error CC: ', err);
+    });
   }
 })();
 

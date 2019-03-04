@@ -4,18 +4,24 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "bl": "node . bl",
-    "cc": "node . cc"
+    "bl": "nodemon --exec babel-node index.js bl",
+    "cc": "nodemon --exec babel-node index.js cc"
   },
   "dependencies": {
     "fs": "0.0.1-security",
     "moment": "^2.24.0",
+    "path": "^0.12.7",
     "web3": "^1.0.0-beta.33",
     "web3-utils": "^1.0.0-beta.46"
   },
   "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.3.4",
+    "@babel/node": "^7.2.2",
+    "@babel/preset-env": "^7.3.4",
     "eslint": "^5.15.0",
     "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.16.0"
+    "eslint-plugin-import": "^2.16.0",
+    "nodemon": "^1.18.10"
   }
 }
