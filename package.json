@@ -12,5 +12,10 @@
     "moment": "^2.24.0",
     "web3": "^1.0.0-beta.33",
     "web3-utils": "^1.0.0-beta.46"
+  },
+  "devDependencies": {
+    "eslint": "^5.15.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.16.0"
   }
 }
