@@ -1,24 +1,25 @@
 const path = require('path');
 const moment = require('moment');
 const { fromAscii, bytesToHex, hexToString } = require('web3-utils');
-const { readFileAsync } = require('./utils');
-
-const appDir = path.dirname(require.main.filename);
+const { readFileAsync, getAppDir, getContractParams } = require('./utils');
 
 let web3;
+let ip;
 
-async function startBvgl(_web3) {
+async function startBvgl(_web3, _ip) {
   web3 = web3 || _web3;
-  const address = await getBvrglstAddress();
+  ip = ip || _ip;
+  console.log('ip: ', ip);
+  const { address, abi } = await getContractParams('bvgl', ip);
+  console.log('abi: ', typeof abi);
   console.log('\nBeverageList Contract Address: %s\n', address);
-  const abi = await getBvrglstAbi();
-  const deployedInstance = new web3.eth.Contract(abi, address);
+  const deployedInstance = new web3.eth.Contract(JSON.parse(abi), address);
   const gasAmount = await setDrinkDataGasEstimate(deployedInstance);
   await setDrinkData(deployedInstance, gasAmount);
 }
 
 async function getBvrglstAbi() {
-  const bvglabiDir = path.join(appDir, '..', 'smart-contracts', 'BeverageList', 'build', 'BeverageList.abi');
+  const bvglabiDir = path.join(getAppDir(), '..', 'smart-contracts', 'BeverageList', 'build', 'BeverageList.abi');
   return JSON.parse(await readFileAsync(bvglabiDir));
 }
 
@@ -31,10 +32,8 @@ async function setDrinkData(instance, gasAmount) {
 
   return new Promise((resolve, reject) => instance.methods
     .setDrinkData(time, drink, weekday)
-    .send({
-      from: '0xe8816898d851d5b61b7f950627d04d794c07ca37',
-      gas: gasAmount,
-    })
+    .send({ from: '0xe8816898d851d5b61b7f950627d04d794c07ca37',
+      gas: gasAmount })
     .on('transactionHash', (hash) => {
       console.log('hash: ', hash);
       resolve();
@@ -63,7 +62,7 @@ function printEvent(receipt) {
 }
 
 async function getBvrglstAddress() {
-  const address = path.join(appDir, '..', 'smart-contracts', 'BeverageList', 'contractAddress');
+  const address = path.join(getAppDir(), '..', 'smart-contracts', 'BeverageList', 'contractAddress');
   const bin = await readFileAsync(address);
   return bytesToHex(bin);
 }
@@ -88,11 +87,9 @@ async function setDrinkDataGasEstimate(instance) {
 
 async function watchEvents(instance) {
   return instance.events
-    .NewDrink({
-      filter: { myIndexedParam: [20, 23] },
+    .NewDrink({ filter: { myIndexedParam: [20, 23] },
       fromBlock: 0,
-      toBlock: 'latest',
-    })
+      toBlock: 'latest' })
     .on('data', (event) => {
       console.log('Event data', event.returnValues);
     })
@@ -109,6 +106,4 @@ let days = [
   'Saturday',
 ];
 
-module.exports = {
-  startBvgl,
-};
+module.exports = { startBvgl };
