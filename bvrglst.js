@@ -3,6 +3,7 @@ const moment = require('moment');
 const { fromAscii, bytesToHex, hexToString } = require('web3-utils');
 const { readFileAsync, getAppDir, getContractParams } = require('./utils');
 
+const accounts = ['0xe8816898d851d5b61b7f950627d04d794c07ca37', '0x5409ed021d9299bf6814279a6a1411a7e866a631', '0x6ecbe1db9ef729cbe972c83fb886247691fb6beb', '0xe36ea790bc9d7ab70c55260c66d52b1eca985f84', '0xe834ec434daba538cd1b9fe1582052b880bd7e63', '0x78dc5d2d739606d31509c31d654056a45185ecb6'];
 let web3;
 let ip;
 
@@ -14,8 +15,11 @@ async function startBvgl(_web3, _ip) {
   console.log('abi: ', typeof abi);
   console.log('\nBeverageList Contract Address: %s\n', address);
   const deployedInstance = new web3.eth.Contract(JSON.parse(abi), address);
-  const gasAmount = await setDrinkDataGasEstimate(deployedInstance);
-  await setDrinkData(deployedInstance, gasAmount);
+
+  const account = accounts[Math.floor(Math.random() * accounts.length)];
+
+  const gasAmount = await setDrinkDataGasEstimate(deployedInstance, account);
+  await setDrinkData(deployedInstance, account, gasAmount);
 }
 
 async function getBvrglstAbi() {
@@ -23,16 +27,17 @@ async function getBvrglstAbi() {
   return JSON.parse(await readFileAsync(bvglabiDir));
 }
 
-async function setDrinkData(instance, gasAmount) {
+async function setDrinkData(instance, account, gasAmount) {
+  console.log('account: ', account);
   console.log('gasAmount: ', gasAmount);
-  const drinks = ['cola', 'fanta', 'water', 'mate', 'coffee', 'spezi'];
+  const drinks = ['water', 'mate', 'coffee'];
   const time = fromAscii(moment(new Date()).format('YYYY-MM-DDTHH:mm:ss'));
   const weekday = fromAscii(days[new Date().getDay()]);
   const drink = fromAscii(drinks[Math.floor(Math.random() * drinks.length)]);
 
   return new Promise((resolve, reject) => instance.methods
     .setDrinkData(time, drink, weekday)
-    .send({ from: '0xe8816898d851d5b61b7f950627d04d794c07ca37',
+    .send({ from: account,
       gas: gasAmount })
     .on('transactionHash', (hash) => {
       console.log('hash: ', hash);
@@ -67,7 +72,7 @@ async function getBvrglstAddress() {
   return bytesToHex(bin);
 }
 
-async function setDrinkDataGasEstimate(instance) {
+async function setDrinkDataGasEstimate(instance, account) {
   const fomat = moment(new Date()).format('YYYY-MM-DDTHH:mm:ss');
   const weekday = fromAscii('heuterrrrr');
   const drink = fromAscii('mateteter');
@@ -76,7 +81,7 @@ async function setDrinkDataGasEstimate(instance) {
   return new Promise((resolve, reject) => {
     instance.methods
       .setDrinkData(time, drink, weekday)
-      .estimateGas({ from: '0xe8816898d851d5b61b7f950627d04d794c07ca37' })
+      .estimateGas({ from: account })
       .then(gasAmount => resolve(gasAmount))
       .catch((error) => {
         console.log('error: ', error);
