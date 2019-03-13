@@ -18,7 +18,7 @@ const { startCC } = require('./cffcn');
 }());
 
 async function initWeb() {
-  const bchainIp = 'ws://oc-appsrv01.informatik.uni-augsburg.de:8081';// getBchainIp(ip);
+  const bchainIp = 'ws://oc-appsrv01.informatik.uni-augsburg.de:8546';// getBchainIp(ip);
   console.log('bchainIp: ', bchainIp);
   const web3 = new Web3(bchainIp);
   console.log('web3: ', web3);
