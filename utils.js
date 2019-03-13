@@ -20,7 +20,7 @@ async function readFileAsync(path) {
 
 async function getContractParams(filename, ip) {
   try {
-    const url = `http://${ip}:9090/files/${filename}.json`;
+    const url = `http://${ip}:8081/files/${filename}.json`;
     console.log('url: ', url);
     const response = await fetch(url);
     return await response.json();
