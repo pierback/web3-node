@@ -46,7 +46,7 @@ async function setDrinkData(instance, account, gasAmount) {
     .on('receipt', (receipt) => {
       printEvent(receipt);
       console.log('Starting over');
-      setTimeout(startBvgl, 7000);
+      setTimeout(startBvgl, 2000);
     })
     .on('error', (err) => {
       console.log('setDrinkData error: ', err);
@@ -54,7 +54,7 @@ async function setDrinkData(instance, account, gasAmount) {
 }
 
 function printEvent(receipt) {
-  if (receipt.events) {
+  if (receipt.events.NewDrink) {
     const { Address, time, drink, weekday } = receipt.events.NewDrink.returnValues;
     console.log('receipt:');
     console.log('  Address', Address);
