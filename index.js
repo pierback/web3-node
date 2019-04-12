@@ -5,7 +5,10 @@ const { getBchainIp } = require('./utils');
 const { getIP } = require('./udp');
 
 (async function main() {
-  const ip = await getIP();
+  const ip = '192.168.188.23';
+  // const ip = 'oc-appsrv01.informatik.uni-augsburg.de';
+  // const ip = await getIP();
+  console.log('ip: ', ip);
   const web3 = await initWeb(ip);
   if (process.argv[2] === 'bl') {
     console.log('process.argv[2]: ', process.argv[2]);
