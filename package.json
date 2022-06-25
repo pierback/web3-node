@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "moment": "^2.24.0",
-    "node-fetch": "^2.3.0",
+    "node-fetch": "^2.6.7",
     "web3": "^1.0.0-beta.33",
     "web3-utils": "^1.0.0-beta.46"
   },
