@@ -8,7 +8,7 @@
     "cc": "nodemon --exec babel-node index.js cc"
   },
   "dependencies": {
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "node-fetch": "^2.3.0",
     "web3": "^1.0.0-beta.33",
     "web3-utils": "^1.0.0-beta.46"
